@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import argparse, os, uuid
 
 def parseDate(date_str):
-    for date_fmt in ('%Y-%m-%d', '%Y%m%d'):
+    for date_fmt in ('%Y-%m-%d', '%Y%m%d', '--%m%d'):
         try:
             return datetime.strptime(date_str, date_fmt)
         except:
