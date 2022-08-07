@@ -57,16 +57,27 @@ for vcf_file in contacts_client.list('/'):
         try:
             bday = parseDate(contact.bday.value)
 
-            calendar = vobject.iCalendar()
-            event = calendar.add('vevent')
-            event.add('summary').value = f"Birthday of {contact.fn.value}"
-            event.add('dtstart').value = bday
-            event.add('dtend').value = bday + timedelta(days=1)
-            event.add('rrule').value =u"FREQ=YEARLY"
-            event.add('uid').value = contact.uid.value
+            for i in range(10):
+                bday_year = datetime(day=bday.day, month=bday.month, year=datetime.now().year + i)
 
-            calendar_client.upload_to(buff=calendar.serialize().encode('utf-8'), remote_path=f"{contact.uid.value}.ics")
-            print(calendar_client.list())
+                age = None
+                if bday.year > 1900:
+                    age = round((bday_year - bday).days / 365.25)
+
+                summary = f"Birthday of {contact.fn.value}"
+                if age:
+                    summary += f" ({age} years)"
+
+                uid = uuid.UUID(int=uuid.UUID(contact.uid.value).int + bday_year.year)
+
+                calendar = vobject.iCalendar()
+                event = calendar.add('vevent')
+                event.add('summary').value = summary
+                event.add('dtstart').value = bday_year
+                event.add('dtend').value = bday_year + timedelta(days=1)
+                event.add('uid').value = uid
+
+                calendar_client.upload_to(buff=calendar.serialize().encode('utf-8'), remote_path=f"{contact.uid.value}.ics")
         except ValueError as e:
             print(f"{e}: {contact.fn.value}")
             continue
