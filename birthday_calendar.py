@@ -75,9 +75,9 @@ for vcf_file in contacts_client.list('/'):
                 event.add('summary').value = summary
                 event.add('dtstart').value = bday_year
                 event.add('dtend').value = bday_year + timedelta(days=1)
-                event.add('uid').value = uid
+                event.add('uid').value = str(uid)
 
-                calendar_client.upload_to(buff=calendar.serialize().encode('utf-8'), remote_path=f"{contact.uid.value}.ics")
+                calendar_client.upload_to(buff=calendar.serialize().encode('utf-8'), remote_path=f"{uid}.ics")
         except ValueError as e:
             print(f"{e}: {contact.fn.value}")
             continue
