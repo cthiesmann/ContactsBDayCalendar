@@ -64,9 +64,9 @@ for vcf_file in contacts_client.list('/'):
                 if bday.year > 1900:
                     age = round((bday_year - bday).days / 365.25)
 
-                summary = f"Birthday of {contact.fn.value}"
+                summary = f"{contact.fn.value}'s birthday"
                 if age:
-                    summary += f" ({age} years)"
+                    summary += f" ({age})"
 
                 uid = uuid.UUID(int=uuid.UUID(contact.uid.value).int + bday_year.year)
 
